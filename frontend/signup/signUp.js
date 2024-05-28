@@ -11,11 +11,15 @@ function togglePasswordVisibility() {
     }
 }
 
-async function submitForm() {
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const password = document.getElementById('password').value;
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    console.log(formData)
+    const username = formData.get('username');
+    const email = formData.get('email');
+    const phone = formData.get('phone')
+    const password = formData.get('password');
 
     const response = await fetch('http://localhost:4000/chatApp/signup', {
         method: 'POST',
@@ -36,4 +40,4 @@ async function submitForm() {
     } else {
         alert(`Error: ${result.message}`);
     }
-}
+})
