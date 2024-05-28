@@ -1,80 +1,33 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcryptjs');
-const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('./config/database');
+const userRoutes = require('./routes/user.js');
+const cors = require('cors')
 
 const app = express();
 const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors({
+    origin: 'http://127.0.0.1:5500'
+}));
 
-// MySQL connection using Sequelize
-const sequelize = new Sequelize('chatAppDB', 'root', '', {
-    host: 'localhost',
-    port: '3306',
-    dialect: 'mysql'
-});
+// Routes
+app.use('/chatApp', userRoutes);
 
-// Define User model
-const User = sequelize.define('User', {
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    phoneNo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-})
-
-// Synchronize models with database
-sequelize.sync()
-    .then(() => console.log('Database & tables created!'))
-    .catch(err => console.log(err));
-
-// Sign-up route
-app.post('/signup', async (req, res) => {
-    const { username, email, phoneNo, password } = req.body;
-
-    try {
-        // Check if the user already exists
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
-
-        // Hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create a new user
-        const newUser = await User.create({
-            username,
-            email,
-            phoneNo,
-            password: hashedPassword
-        });
-
-        res.status(201).json({ message: 'User created successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error' });
-    }
-});
+// Test database connection and sync models
+// sequelize.authenticate()
+//     .then(() => {
+//         console.log('Database connected...');
+//         return sequelize.sync();
+//     })
+//     .then(() => console.log('Database & tables created!'))
+//     .catch(err => console.log('Error: ' + err));
 
 // Start the server
-
+sequelize.sync({focus: true}).then(() => {
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
     });
-
+  });
