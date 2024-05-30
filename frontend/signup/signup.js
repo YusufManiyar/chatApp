@@ -1,7 +1,7 @@
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('password');
-    const toggleIcon = document.querySelector('.toggle-password');
-    
+function togglePasswordVisibility(inputId, toggleIconId) {
+    const passwordInput = document.getElementById(inputId);
+    const toggleIcon = document.getElementById(toggleIconId)
+    console.log(toggleIcon)
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         toggleIcon.textContent = '🙈';
@@ -9,9 +9,12 @@ function togglePasswordVisibility() {
         passwordInput.type = 'password';
         toggleIcon.textContent = '👁️';
     }
+
+    // const passwordType = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    // passwordInput.setAttribute('type', passwordType);
 }
 
-document.getElementById('signupForm').addEventListener('submit', async (e) => {
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -20,6 +23,12 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     const email = formData.get('email');
     const phone = formData.get('phone')
     const password = formData.get('password');
+    const confirmPassword = formData.get('confirm-password');
+
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+    }
 
     const response = await fetch('http://localhost:4000/chatApp/signup', {
         method: 'POST',
@@ -30,7 +39,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
             username,
             email,
             phone,
-            password
+            password,
         })
     });
 
