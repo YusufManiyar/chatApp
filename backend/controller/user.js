@@ -46,7 +46,7 @@ module.exports = {
         }
     },
 
-    login : async (req, res) => {
+    login : async (req, res, next) => {
         const { email, password } = req.body;
     
         try {
@@ -61,8 +61,11 @@ module.exports = {
             if (!isMatch) {
                 return res.status(400).json({ message: 'Invalid email or password' });
             }
+
+            req.body = {id: user.id}
+            next()
     
-            res.status(200).json({ message: 'Login successful' });
+            // res.status(200).json({ message: 'Login successful', user: user });
         } catch (error) {
             res.status(500).json({ message: 'Server error' });
         }

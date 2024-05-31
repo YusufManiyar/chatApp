@@ -12,7 +12,9 @@ function togglePasswordVisibility(id) {
 }
 
 // Function to submit the login form data
-async function submitLoginForm() {
+document.getElementById('login-form').addEventListener("submit", async (e) => {
+    e.preventDefault()
+
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -29,8 +31,8 @@ async function submitLoginForm() {
 
     const result = await response.json();
     if (response.ok) {
-        alert(result.message);
+    localStorage.setItem("token", response.token)
     } else {
         alert(`Error: ${result.message}`);
     }
-}
+})

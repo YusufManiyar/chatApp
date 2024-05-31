@@ -18,7 +18,6 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    console.log(formData)
     const username = formData.get('username');
     const email = formData.get('email');
     const phone = formData.get('phone')
