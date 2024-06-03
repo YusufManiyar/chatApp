@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener("submit", async (e) => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const response = await fetch('http://localhost:4000/chatApp/login', {
+    const response = await fetch('http://localhost:4000/user/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -32,6 +32,7 @@ document.getElementById('login-form').addEventListener("submit", async (e) => {
     const result = await response.json();
     if (response.ok) {
     localStorage.setItem("token", result.token)
+    window.location.href = '../home/home.html'
     } else {
         alert(`Error: ${result.message}`);
     }

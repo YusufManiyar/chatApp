@@ -1,9 +1,10 @@
 const express = require('express');
-const { addMessage } = require('../controller/message.js');
+const { addMessage, getMessage } = require('../controller/message.js');
 const { verifyToken } = require('../middleware/autho.js');
 
 const router = express.Router();
 
-router.post('/message', verifyToken, addMessage);
+router.post('/', verifyToken, addMessage);
+router.get('/', verifyToken, getMessage);
 
 module.exports = router;

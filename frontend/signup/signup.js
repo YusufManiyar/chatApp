@@ -29,7 +29,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
         return;
     }
 
-    const response = await fetch('http://localhost:4000/chatApp/signup', {
+    const response = await fetch('http://localhost:4000/user/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
 
     const result = await response.json();
     if (response.ok) {
-        alert(result.message);
+        window.location.href = '../login/login.html'
     } else {
         alert(`Error: ${result.message}`);
     }

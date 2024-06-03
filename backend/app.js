@@ -8,6 +8,7 @@ const cors = require('cors')
 const app = express();
 const port = process.env.PORT || 4000;
 
+app.use(bodyParser.urlencoded({extended: false}))
 // Middleware
 app.use(bodyParser.json());
 app.use(cors({
@@ -16,7 +17,7 @@ app.use(cors({
 
 // Routes
 app.use('/user', userRoutes);
-app.use('/chatApp', messageRoutes);
+app.use('/message', messageRoutes);
 
 // Test database connection and sync models
 // sequelize.authenticate()

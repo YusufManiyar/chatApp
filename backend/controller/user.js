@@ -70,5 +70,16 @@ module.exports = {
             res.status(500).json({ message: 'Server error' });
         }
     },
+
+    allUser: async(req, res) => {
+        try {
+            const users = await User.findAll({
+                attributes: { exclude: ['password'] } // Exclude the password field
+            });
+            res.status(200).json(users);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to fetch users' });
+        }
+    }
     
  };
