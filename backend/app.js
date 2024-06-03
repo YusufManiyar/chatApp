@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/user.js');
+const messageRoutes = require('./routes/message.js')
 const cors = require('cors')
 
 const app = express();
@@ -14,7 +15,8 @@ app.use(cors({
 }));
 
 // Routes
-app.use('/chatApp', userRoutes);
+app.use('/user', userRoutes);
+app.use('/chatApp', messageRoutes);
 
 // Test database connection and sync models
 // sequelize.authenticate()
