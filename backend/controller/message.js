@@ -17,19 +17,35 @@ module.exports = {
     
     getMessage: async(req, res) => {
         try {
+            console.log('reqqq',req.query)
             const user = req.user
-            const peer = req.query.id
-            console.log(user, peer)
-            const messages = await Message.findAll({
-                where: {
-                    [Op.or]: [
-                        { senderId: user.id, receiverId: peer },
-                        { senderId: peer, receiverId: user.id }
-                    ]
+            const query = req.query
+            const peer = query.id
+            const skip = query.skip
+            const limit = query.limit || 10
+
+            const matchParams = {
+                [Op.or]: [
+                    { senderId: user.id, receiverId: peer },
+                    { senderId: peer, receiverId: user.id }
+                ],
+            }
+
+            if(skip) {
+                matchParams.id = {
+                    [Op.gt]: skip
                 }
+            }
+
+            const messages = await Message.findAll({
+                where: matchParams,
+                order: [['id', 'ASC']],
+                limit: Number(limit)
             });
+
             res.status(200).json(messages);
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: 'Failed to fetch users' });
         }
     }

@@ -4,6 +4,7 @@ const token = localStorage.getItem('token')
 
 let selectedUser
 let messages=''
+let lastMessageId
 
 document.getElementById('send-button').addEventListener('click', async () => {
     const messageInput = document.getElementById('message-input');
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function selectUser(user) {
     selectedUser = user;
+    lastMessageId = undefined
     const chatHeader = document.getElementById('chat-header-title')
     chatHeader.innerText = `Chatting with ${user.username}`;
     chatHeader.setAttribute('userId', user.id)    
@@ -103,7 +105,13 @@ function selectUser(user) {
 
 async function fetchMessages() {
     if (selectedUser) {
-        const response = await fetch(`http://localhost:4000/message?id=${encodeURIComponent(selectedUser.id)}`, {
+
+        let queryParams = ''
+        queryParams += `id=${encodeURIComponent(selectedUser.id)}`
+        queryParams += lastMessageId ? `&skip=${encodeURIComponent(lastMessageId)}` : ''
+        queryParams += `&limit=${encodeURIComponent(2)}`
+
+        const response = await fetch(`http://localhost:4000/message?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -112,12 +120,15 @@ async function fetchMessages() {
         })
 
         const messages = await response.json()
-        const messageContainer = document.getElementById('chat-messages');
-        messageContainer.innerHTML=''
-        messages.forEach(message => {
-            let type = selectedUser.id === message.receiverId ? 'recieved': 'sent'
-            appendMessage(message.message, type)
-        })
+        console.log(messages)
+
+        if(messages && messages.length > 0) {
+            lastMessageId = messages[messages.length-1].id
+            messages.forEach(message => {
+                let type = selectedUser.id === message.receiverId ? 'sent' : 'recieved'
+                appendMessage(message.message, type)
+            })
+        }
     }
 }
 
