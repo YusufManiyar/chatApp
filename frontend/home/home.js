@@ -34,6 +34,8 @@ document.getElementById('send-button').addEventListener('click', async () => {
 //         appendMessage(message, 'received');
 //     }
 // });
+// chat-messages - center
+// message -
 
 function appendMessage(message, type) {
     const messageContainer = document.getElementById('chat-messages');
@@ -113,11 +115,11 @@ async function fetchMessages() {
         const messageContainer = document.getElementById('chat-messages');
         messageContainer.innerHTML=''
         messages.forEach(message => {
-            let type = selectUser.id === message.receiverId ? 'recieve': 'sent'
+            let type = selectedUser.id === message.receiverId ? 'recieved': 'sent'
             appendMessage(message.message, type)
         })
     }
 }
 
 // Mock receiving messages for demonstration
-setInterval(fetchMessages, 5000);
+setInterval(fetchMessages, 1000);
