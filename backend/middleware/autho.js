@@ -22,6 +22,6 @@ module.exports = {
         const token =  jwt.sign(id, 'VHHZXBluiahY3A8EC7AGOC8WDO8gRC87')
         
         res.setHeader('Authorization', 'Bearer ' + token)
-        res.status(200).json({token})
+        res.status(200).json({token, id})
     }
 }

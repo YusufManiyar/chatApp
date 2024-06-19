@@ -10,15 +10,17 @@
     <div class="container">
         <div class="user-list-section">
             <div class="search-box">
-                <input type="text" id="search-input" placeholder="Search by phone number...">
+                <input type="text" id="search-input" placeholder="Search...">
+                <button id="create-group-button" title="Create Group Chat">+</button>
             </div>
-            <ul id="user-list">
+            <ul id="group-list">
                 <!-- User list items will be appended here -->
             </ul>
         </div>
         <div class="chat-section">
             <div class="chat-header">
                 <h2 id="chat-header-title">Select a user to start chat</h2>
+                <button id="add-member-button" title="Add Member" style="display:none;">+</button>
             </div>
             <div class="chat-messages" id="chat-messages">
                 <!-- Messages will be appended here -->
@@ -30,7 +32,35 @@
         </div>
     </div>
 
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <!-- Create Group Modal -->
+    <div id="create-group-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create Group Chat</h2>
+            <input type="text" id="group-name-input" placeholder="Topic"  required>
+            <div class="dropdown">
+                <button class="dropdown-toggle" id="dropdownToggle">Add Members</button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <ul id="user-list">
+                        <!-- User list items will be appended here -->
+                    </ul>
+                </div>
+            </div>        
+           
+            <button id="create-group-submit">Create Group</button>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div id="add-member-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Members</h2>
+            <input type="text" id="add-member-input" placeholder="Add Members (comma separated user IDs)">
+            <button id="add-member-submit">Add Members</button>
+        </div>
+    </div>
+
     <script src="home.js"></script>
 </body>
 </html>

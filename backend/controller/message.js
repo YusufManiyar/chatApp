@@ -20,15 +20,12 @@ module.exports = {
             console.log('reqqq',req.query)
             const user = req.user
             const query = req.query
-            const peer = query.id
+            const groupId = query.id
             const skip = query.skip
             const limit = query.limit || 10
 
             const matchParams = {
-                [Op.or]: [
-                    { senderId: user.id, receiverId: peer },
-                    { senderId: peer, receiverId: user.id }
-                ],
+                receiverId: groupId
             }
 
             if(skip) {

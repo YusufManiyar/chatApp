@@ -32,6 +32,7 @@ document.getElementById('login-form').addEventListener("submit", async (e) => {
     const result = await response.json();
     if (response.ok) {
     localStorage.setItem("token", result.token)
+    localStorage.setItem("user", result.id)
     window.location.href = '../home/home.html'
     } else {
         alert(`Error: ${result.message}`);

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/user.js');
 const messageRoutes = require('./routes/message.js')
+const groupRoutes = require('./routes/group.js')
 const cors = require('cors')
 
 const app = express();
@@ -18,17 +19,8 @@ app.use(cors({
 // Routes
 app.use('/user', userRoutes);
 app.use('/message', messageRoutes);
+app.use('/group', groupRoutes)
 
-// Test database connection and sync models
-// sequelize.authenticate()
-//     .then(() => {
-//         console.log('Database connected...');
-//         return sequelize.sync();
-//     })
-//     .then(() => console.log('Database & tables created!'))
-//     .catch(err => console.log('Error: ' + err));
-
-// Start the server
 sequelize.sync({focus: true}).then(() => {
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
