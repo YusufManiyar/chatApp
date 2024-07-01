@@ -18,10 +18,12 @@ module.exports = {
     },
 
     generateToken:  (req, res, next) => {
-        const { id } = req.body
-        const token =  jwt.sign(id, 'VHHZXBluiahY3A8EC7AGOC8WDO8gRC87')
+        const user = req.body
+        console.log(user, '=> user')
+        const token =  jwt.sign(user.id, 'VHHZXBluiahY3A8EC7AGOC8WDO8gRC87')
+        user.id = ''
         
         res.setHeader('Authorization', 'Bearer ' + token)
-        res.status(200).json({token, id})
+        res.status(200).json({token, user})
     }
 }

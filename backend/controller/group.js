@@ -17,6 +17,7 @@ module.exports = {
                 const groupMembers = memberIds.map(memberId => ({
                     memberId,
                     groupId: newGroup.id,
+                    role: createdBy === memberId ? 'admin' : 'user' 
                 }));
                 await GroupMember.bulkCreate(groupMembers);
             }
@@ -38,15 +39,10 @@ module.exports = {
                     {
                         model: Group,
                         as: 'group',
-                    },
-                    {
-                        model: User,
-                        as: 'user',
                     }
                 ]
             })
 
-            console.log(group)
             res.status(200).json(group);
         } catch (error) {
             console.log(error)

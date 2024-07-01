@@ -19,6 +19,10 @@ const GroupMember = sequelize.define('groupMember', {
             model: User,
             key: 'id'
         }
+    },
+    role: {
+        type: DataTypes.ENUM('admin', 'user'),
+        allowNull: false,
     }
 });
 

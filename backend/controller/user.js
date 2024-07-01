@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../model/user.js');
-const {Op} = require('sequelize')
+const {Op} = require('sequelize');
+const GroupMember = require('../model/groupMembers.js');
 
 
 module.exports = { 
@@ -62,7 +63,7 @@ module.exports = {
                 return res.status(400).json({ message: 'Invalid email or password' });
             }
 
-            req.body = {id: user.id}
+            req.body = user
             next()
     
             // res.status(200).json({ message: 'Login successful', user: user });
@@ -73,10 +74,28 @@ module.exports = {
 
     allUser: async(req, res) => {
         try {
-            const users = await User.findAll({
-                attributes: { exclude: ['password'] } // Exclude the password field
-            });
+            const query = req.query
+            const groupId = query.id
+            const user = req.user
+            console.log(groupId, 'groupIdddddd')
+            if(groupId === undefined){
+                const users = await User.findAll({
+                    where: {id: { [Op.ne]: user.id}},
+                    attributes: { exclude: ['password'] } // Exclude the password field
+                });
             res.status(200).json(users);
+            }else{
+                const members = await GroupMember.findAll({
+                    where: {groupId: groupId}
+                })
+                const memberIds = []
+                members.map(el => memberIds.push(el.memberId))
+                console.log(memberIds, groupId, '=> idssssssss')
+                const users = await User.findAll({
+                    where: {id: { [Op.notIn]: [...memberIds]}}
+                })
+                res.status(200).json(users);
+            }
         } catch (error) {
             res.status(500).json({ error: 'Failed to fetch users' });
         }
