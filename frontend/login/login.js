@@ -37,7 +37,7 @@ document.getElementById('login-form').addEventListener("submit", async (e) => {
     if (response.ok) {
     localStorage.setItem("token", result.token)
     localStorage.setItem("user", JSON.stringify(result.user))
-    window.location.href = '../home/home.html'
+    window.location.href = '../home/index.html'
     } else {
         alert(`Error: ${result.message}`);
     }
