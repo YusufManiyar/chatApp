@@ -367,7 +367,7 @@ document.getElementById('group-info').addEventListener('click', async () => {
 
 async function fetchMessages(selectedChat, lastMessageId) {
     if (selectedChat) {
-        let fetchMessageLimit = 2
+        let fetchMessageLimit = 10
         let queryParams = ''
         queryParams += `id=${encodeURIComponent(selectedChat.id)}`
         queryParams += lastMessageId ? `&skip=${encodeURIComponent(lastMessageId)}` : ''
