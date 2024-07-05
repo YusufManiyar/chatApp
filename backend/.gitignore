@@ -1,0 +1,21 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore compiled binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore environment-specific files
+.env
+
+# Ignore sensitive information
+credentials.json
+
+# Ignore operating system generated files
+.DS_Store
+Thumbs.db
