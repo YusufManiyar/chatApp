@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 // Middleware
 app.use(bodyParser.json());
 app.use(cors({
-    origin: 'https://chatmet.netlify.app/'
+    origin: 'https://chatmet.netlify.app'
 }));
 
 console.log('frontend url=>', process.env.CHATMET_FRONTEND_URL, typeof process.env.CHATMET_FRONTEND_URL)
