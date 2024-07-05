@@ -181,6 +181,7 @@ async function selectGroup(group, role) {
     document.getElementById('groupInfo').style.display = 'none'
     document.getElementById('group-detail').style.display = 'flex'
     document.getElementById('send-button').addEventListener('click', async () => {
+    document.getElementById('send-button').disabled = true
     const messageInput = document.getElementById('message-input');
     const message = messageInput.value;
     if (message.trim() && group) {
@@ -200,6 +201,7 @@ async function selectGroup(group, role) {
 
         messageInput.value = '';
     }
+    document.getElementById('send-button').disabled = false
     });
 
     // stop fetch message event for previously selected group

@@ -33,7 +33,7 @@ document.getElementById('login-form').addEventListener("submit", async (e) => {
     });
 
     const result = await response.json();
-    console.log(result)
+
     if (response.ok) {
     localStorage.setItem("token", result.token)
     localStorage.setItem("user", JSON.stringify(result.user))
