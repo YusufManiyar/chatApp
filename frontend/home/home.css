@@ -3,9 +3,19 @@ body {
     background-color: #e8f5fe;
     margin: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+
+#userHead{
+    display: flex;
+    /* flex-direction: row; */
+    width: 80%;
+    align-items: flex-start;
+    justify-content: space-between;
+    max-width: 1200px;
 }
 
 .container {
@@ -32,7 +42,7 @@ body {
 }
 
 .search-box input {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -65,9 +75,13 @@ li.clicked {
     width: 70%;
     display: flex;
     flex-direction: column;
+    border-right: 1px solid #ccc;
+
 }
 
 .chat-header {
+    display: flex;
+    justify-content: center;
     padding: 20px;
     background-color: #007bff;
     color: white;
@@ -145,10 +159,10 @@ li.clicked {
 
 /* Button Styles */
 #search-input {
-    width: 80%;
+    width: 70%;
 }
 
-#create-group-button, #add-member-button {
+#create-group-button, #add-member-button, #group-info {
     margin-left: 10px;
     padding: 5px 10px;
     cursor: pointer;
@@ -158,8 +172,9 @@ li.clicked {
     border-radius: 5px;
 }
 
-#add-member-button {
+#group-detail {
     display: none; /* Initially hidden */
+    align-items: center;
 }
 
 /* Modal Styles */
@@ -242,3 +257,64 @@ li.clicked {
 .dropdown-menu input[type="checkbox"] {
     margin-right: 10px;
 }
+
+#logout-button {
+    background: transparent;
+    border: none;
+}
+
+.group-info {
+    display: none;
+    flex-direction: column;
+    width: 20%;
+    background-color: white;
+    padding: 10px;
+    overflow-y: auto;
+    justify-content: space-between;
+  }
+
+  .group-info button{
+    border: none;
+    background-color: white;
+  }
+
+  /* .group-info button:hover{
+    color: rgb(116, 255, 2)
+  } */
+
+  .group-info h3 {
+    margin-top: 0;
+  }
+
+  .group-info #user{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between;
+    margin: 10px;
+  }
+
+  .group-info h6 {
+    margin: 0;
+  }
+
+  /* #addMember{
+    display: none;
+  } */
+
+  .add-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  ul {
+   list-style-type: none;
+   margin-left: 10px;
+   padding: 0;
+  }
+
+  li {
+    margin-left: 4px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }

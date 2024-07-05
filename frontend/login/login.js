@@ -30,9 +30,10 @@ document.getElementById('login-form').addEventListener("submit", async (e) => {
     });
 
     const result = await response.json();
+    console.log(result)
     if (response.ok) {
     localStorage.setItem("token", result.token)
-    localStorage.setItem("user", result.id)
+    localStorage.setItem("user", JSON.stringify(result.user))
     window.location.href = '../home/home.html'
     } else {
         alert(`Error: ${result.message}`);

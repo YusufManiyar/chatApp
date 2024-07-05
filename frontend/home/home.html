@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="home.css">
 </head>
 <body>
+    <div id="userHead">
+        <div>
+            <h1 id="userName">Welcome</h1>
+        </div>
+        <div>
+            <button id="logout-button">
+                <svg height="48" viewBox="0 0 48 48" width="40" xmlns="http://www.w3.org/2000/svg"><path d="m33.749 7.759-.93 1.55a1 1 0 0 0 .314 1.339 16.2 16.2 0 1 1 -18.258 0 1 1 0 0 0 .313-1.338l-.926-1.546a1.012 1.012 0 0 0 -1.418-.334 20 20 0 1 0 22.315 0 1 1 0 0 0 -1.41.329z"/><rect height="20" rx="1" width="4" x="20" y="2"/></svg>
+            </button>
+        </div>
+    </div>
     <div class="container">
         <div class="user-list-section">
             <div class="search-box">
@@ -20,7 +30,12 @@
         <div class="chat-section">
             <div class="chat-header">
                 <h2 id="chat-header-title">Select a user to start chat</h2>
-                <button id="add-member-button" title="Add Member" style="display:none;">+</button>
+                <div id="group-detail">
+                    <button id="add-member-button" title="Add Member"><img src="../assets/icons8-add-user-male-25.png" alt="addMember"></button>
+                    <button id="group-info" title="Group Info"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50">
+                        <path d="M25,2C12.297,2,2,12.297,2,25s10.297,23,23,23s23-10.297,23-23S37.703,2,25,2z M25,11c1.657,0,3,1.343,3,3s-1.343,3-3,3 s-3-1.343-3-3S23.343,11,25,11z M29,38h-2h-4h-2v-2h2V23h-2v-2h2h4v2v13h2V38z"></path>
+                    </svg></button>
+                </div>
             </div>
             <div class="chat-messages" id="chat-messages">
                 <!-- Messages will be appended here -->
@@ -28,6 +43,12 @@
             <div class="chat-input">
                 <input type="text" id="message-input" placeholder="Type a message...">
                 <button id="send-button">Send</button>
+            </div>
+        </div>
+        <div class="group-info" id="groupInfo">
+            <div>
+                <h3>Group Members</h3>
+                <ul id="groupMembersList"></ul>
             </div>
         </div>
     </div>
@@ -52,14 +73,14 @@
     </div>
 
     <!-- Add Member Modal -->
-    <div id="add-member-modal" class="modal" style="display:none;">
+    <!-- <div id="add-member-modal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Add Members</h2>
             <input type="text" id="add-member-input" placeholder="Add Members (comma separated user IDs)">
             <button id="add-member-submit">Add Members</button>
         </div>
-    </div>
+    </div> -->
 
     <script src="home.js"></script>
 </body>
