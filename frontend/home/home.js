@@ -1,3 +1,4 @@
+import config from '../config.js'
 
 // check user details
 const token = localStorage.getItem('token')
@@ -62,7 +63,7 @@ document.getElementById('create-group-submit').onclick = async () => {
         })
 
         if(name !== ""){
-            const response = await fetch('http://localhost:4000/group',{
+            const response = await fetch(`${config.BACKEND_URL}/group`,{
                 method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -114,7 +115,7 @@ dropdownToggle.addEventListener('click',async () => {
 
 async function getUsers(groupId){
 
-    const response =  await fetch(`http://localhost:4000/user/users?${groupId}`, {
+    const response =  await fetch(`${config.BACKEND_URL}/user/users?${groupId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -144,7 +145,7 @@ function showGroup(group, role) {
 document.addEventListener('DOMContentLoaded', async () => {
     // Fetch All groups of the user
     try {
-       const response =  await fetch('http://localhost:4000/group', {
+       const response =  await fetch(`${config.BACKEND_URL}/group`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -185,7 +186,7 @@ async function selectGroup(group, role) {
     if (message.trim() && group) {
         // Send message to backend API
         try {
-            await fetch('http://localhost:4000/message', {
+            await fetch(`${config.BACKEND_URL}/message`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -252,7 +253,7 @@ document.getElementById('add-member-button').addEventListener('click', async () 
 async function addUserToGroup(memberId){
     let groupId = document.getElementById('chat-header-title').getAttribute('groupId')
     try{
-        const response = await fetch('http://localhost:4000/groupMember', {
+        const response = await fetch(`${config.BACKEND_URL}/groupMember`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -278,7 +279,7 @@ document.getElementById('group-info').addEventListener('click', async () => {
     let groupId = document.getElementById('chat-header-title').getAttribute('groupId')
     groupId = `id=${encodeURIComponent(groupId)}`
     // let memberData = []
-     fetch(`http://localhost:4000/groupMember?${groupId}`,{
+     fetch(`${config.BACKEND_URL}/groupMember?${groupId}`,{
         method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -370,7 +371,7 @@ async function fetchMessages(selectedChat, lastMessageId) {
         queryParams += lastMessageId ? `&skip=${encodeURIComponent(lastMessageId)}` : ''
         queryParams += `&limit=${encodeURIComponent(fetchMessageLimit)}`
 
-        const response = await fetch(`http://localhost:4000/message?${queryParams}`, {
+        const response = await fetch(`${config.BACKEND_URL}/message?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -409,7 +410,7 @@ async function removeMember(e) {
         let current = e.target.id.length > 0 ? e.target : e.target.parentElement
         let params = `id=${encodeURIComponent(current.id)}`
         try{
-            const response = await fetch(`http://localhost:4000/groupMember?${params}`,{
+            const response = await fetch(`${config.BACKEND_URL}/groupMember?${params}`,{
                 method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -432,7 +433,7 @@ async function makeAdmin(e){
     let current = e.target.id.length > 0 ? e.target : e.target.parentElement
     let params = `id=${encodeURIComponent(current.id)}`
     try{
-        const response = await fetch(`http://localhost:4000/groupMember?${params}`,{
+        const response = await fetch(`${config.BACKEND_URL}/groupMember?${params}`,{
             method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,3 +1,8 @@
+import config from "../config.js";
+
+document.getElementById('password-icon').onclick = () => togglePasswordVisibility('password', 'password-icon')
+document.getElementById('confirm-password-icon').onclick = () => togglePasswordVisibility('confirm-password', 'confirm-password-icon')
+
 function togglePasswordVisibility(inputId, toggleIconId) {
     const passwordInput = document.getElementById(inputId);
     const toggleIcon = document.getElementById(toggleIconId)
@@ -9,6 +14,7 @@ function togglePasswordVisibility(inputId, toggleIconId) {
         passwordInput.type = 'password';
         toggleIcon.textContent = '👁️';
     }
+
 
     // const passwordType = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     // passwordInput.setAttribute('type', passwordType);
@@ -29,7 +35,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
         return;
     }
 
-    const response = await fetch('http://localhost:4000/user/signup', {
+    const response = await fetch(`${config.BACKEND_URL}/user/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

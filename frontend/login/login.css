@@ -240,7 +240,7 @@ body {
     color: #aaa;
 }
 
-.input-group .toggle-password {
+.input-group #toggle-password {
     position: absolute;
     right: 5%;
     top: 50%;
