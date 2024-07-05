@@ -1,6 +1,8 @@
+import config from '../config.js'
+
 // Function to toggle password visibility
-function togglePasswordVisibility(id) {
-    const passwordInput = document.getElementById(id);
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password');
     const toggleIcon = document.getElementById('toggle-password')
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
@@ -10,6 +12,7 @@ function togglePasswordVisibility(id) {
         toggleIcon.textContent = '👁️';
     }
 }
+document.getElementById('toggle-password').addEventListener("click", togglePasswordVisibility)
 
 // Function to submit the login form data
 document.getElementById('login-form').addEventListener("submit", async (e) => {
@@ -18,7 +21,7 @@ document.getElementById('login-form').addEventListener("submit", async (e) => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const response = await fetch('http://localhost:4000/user/login', {
+    const response = await fetch(`${config.BACKEND_URL}/user/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
