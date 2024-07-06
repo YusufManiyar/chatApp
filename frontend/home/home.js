@@ -24,7 +24,7 @@ socket.addEventListener('message', (event) => {
     localStorage.setItem(`group ${data.recieverId}`, JSON.stringify(messageData))
 
     let type = currentUser.id == data.senderId ? 'sent' : 'recieved'
-    appendMessage(data, type)
+    appendMessage(data.message, type)
 });
 
 // logout button
