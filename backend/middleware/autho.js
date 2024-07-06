@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 const user = require('../model/user.js')
+const Group = require('../model/group.js')
+const GroupMember = require('../model/groupMembers.js')
 const SECRET_KEY = process.env.SECRET_KEY || 'VHHZXBluiahY3A8EC7AGOC8WDO8gRC87'
 
 module.exports = {
@@ -13,7 +15,29 @@ module.exports = {
             })
         } catch (err) {
             console.log(err)
-            return res.status(401).json({message: 'unatutorize acces'})
+            return res.status(401).json({message: 'unauthorized access'})
+        }
+    },
+
+    verifyTokenSocket: async (token, cb) => {
+        try{
+            const userId = jwt.verify(token, SECRET_KEY)
+            const authorizedUser = await user.findByPk(userId)
+            if(!authorizedUser)  {
+                throw 'unauthorized access'
+            }
+
+            const groupMemberInfo = await GroupMember.findAll({ where : { memberId : userId } })
+            if(groupMemberInfo) {
+                authorizedUser.groups = groupMemberInfo.map(info => info.groupId)
+            }
+            else {
+                authorizedUser.groups = []
+            }
+
+            cb(null, authorizedUser)
+        } catch (err) {
+            cb(err)
         }
     },
 

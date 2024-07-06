@@ -14,30 +14,21 @@ module.exports = {
             res.status(500).json({ error: 'Failed to send message' });
         }
     },  
-    
+
     getMessage: async(req, res) => {
         try {
             console.log('reqqq',req.query)
             const user = req.user
             const query = req.query
             const groupId = query.id
-            const skip = query.skip
-            const limit = query.limit || 10
 
             const matchParams = {
                 receiverId: groupId
             }
 
-            if(skip) {
-                matchParams.id = {
-                    [Op.gt]: skip
-                }
-            }
-
             const messages = await Message.findAll({
                 where: matchParams,
-                order: [['id', 'ASC']],
-                limit: Number(limit)
+                order: [['id', 'ASC']]
             });
 
             res.status(200).json(messages);
