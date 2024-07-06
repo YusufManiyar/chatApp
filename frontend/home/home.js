@@ -206,7 +206,6 @@ async function selectGroup(group, role) {
         if (message.trim() && group) {
             // Send message to backend API
             try {
-                socket.send()
                 socket.send(JSON.stringify({ receiverId: group.id, message }))
             } catch (error) {
                 console.error('Failed to send message', error);
