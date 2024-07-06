@@ -11,11 +11,7 @@ module.exports = {
 
             wss.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN && client.user.groups.includes(receiverId)) {
-
-                    client.send(JSON.stringify({
-                        type: 'newMessage',
-                        ...newMessage
-                    }));
+                    client.send(JSON.stringify(newMessage));
                 }
             });
         } catch (error) {

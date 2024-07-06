@@ -20,7 +20,7 @@ socket.addEventListener('message', (event) => {
     const data = JSON.parse(event.data)
     let messageData = localStorage.getItem(`group ${data.recieverId}`)
     messageData = messageData ? JSON.parse(messageData) : { messages : [], lastMessageId: undefined}
-    messageData.messages = messageData.messages.concat(messages)
+    messageData.messages = messageData.messages.concat([data])
     localStorage.setItem(`group ${data.recieverId}`, JSON.stringify(messageData))
 
     let type = currentUser.id == message.senderId ? 'sent' : 'recieved'
