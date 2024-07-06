@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
 const user = require('../model/user.js')
-const Group = require('../model/group.js')
 const GroupMember = require('../model/groupMembers.js')
 const SECRET_KEY = process.env.SECRET_KEY || 'VHHZXBluiahY3A8EC7AGOC8WDO8gRC87'
 
@@ -37,6 +36,7 @@ module.exports = {
 
             cb(null, authorizedUser)
         } catch (err) {
+            console.log('verify token error===========>>>>>>', err)
             cb(err)
         }
     },
