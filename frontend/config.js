@@ -1,3 +1,3 @@
 export default {
-    BACKEND_URL: 'https://chat-app.osc-fr1.scalingo.io'
+    BACKEND_BASE_URL: 'chat-app.osc-fr1.scalingo.io'
 }

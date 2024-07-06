@@ -35,7 +35,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
         return;
     }
 
-    const response = await fetch(`${config.BACKEND_URL}/user/signup`, {
+    const response = await fetch(`https://${BACKEND_BASE_URL}/user/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

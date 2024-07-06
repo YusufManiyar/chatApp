@@ -8,6 +8,25 @@ if(!token) {
     window.location.href = '../login/login.html'
 }
 
+const socket = new WebSocket(`ws://${config.BACKEND_BASE_URL}`)
+
+socket.addEventListener('open', () => {
+    console.log('WebSocket connection established');
+});
+
+socket.addEventListener('newMessage', (event) => {
+    console.log('Message from server:', event.data);
+
+    const data = JSON.parse(event.data)
+    let messageData = localStorage.getItem(`group ${data.recieverId}`)
+    messageData = messageData ? JSON.parse(messageData) : { messages : [], lastMessageId: undefined}
+    messageData.messages = messageData.messages.concat(messages)
+    localStorage.setItem(`group ${data.recieverId}`, JSON.stringify(messageData))
+
+    let type = currentUser.id == message.senderId ? 'sent' : 'recieved'
+    appendMessage(data, type)
+});
+
 // logout button
 document.getElementById('logout-button').addEventListener('click', () => {
     localStorage.clear()
@@ -63,7 +82,7 @@ document.getElementById('create-group-submit').onclick = async () => {
         })
 
         if(name !== ""){
-            const response = await fetch(`${config.BACKEND_URL}/group`,{
+            const response = await fetch(`https://${BACKEND_BASE_URL}/group`,{
                 method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -115,7 +134,7 @@ dropdownToggle.addEventListener('click',async () => {
 
 async function getUsers(groupId){
 
-    const response =  await fetch(`${config.BACKEND_URL}/user/users?${groupId}`, {
+    const response =  await fetch(`https://${BACKEND_BASE_URL}/user/users?${groupId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -145,7 +164,7 @@ function showGroup(group, role) {
 document.addEventListener('DOMContentLoaded', async () => {
     // Fetch All groups of the user
     try {
-       const response =  await fetch(`${config.BACKEND_URL}/group`, {
+       const response =  await fetch(`https://${BACKEND_BASE_URL}/group`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -181,27 +200,21 @@ async function selectGroup(group, role) {
     document.getElementById('groupInfo').style.display = 'none'
     document.getElementById('group-detail').style.display = 'flex'
     document.getElementById('send-button').addEventListener('click', async () => {
-    document.getElementById('send-button').disabled = true
-    const messageInput = document.getElementById('message-input');
-    const message = messageInput.value;
-    if (message.trim() && group) {
-        // Send message to backend API
-        try {
-            await fetch(`${config.BACKEND_URL}/message`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ receiverId: group.id, message })
-            });
-        } catch (error) {
-            console.error('Failed to send message', error);
-        }
+        document.getElementById('send-button').disabled = true
+        const messageInput = document.getElementById('message-input');
+        const message = messageInput.value;
+        if (message.trim() && group) {
+            // Send message to backend API
+            try {
+                socket.send()
+                socket.send(JSON.stringify({ receiverId: group.id, message }))
+            } catch (error) {
+                console.error('Failed to send message', error);
+            }
 
-        messageInput.value = '';
-    }
-    document.getElementById('send-button').disabled = false
+            messageInput.value = '';
+        }
+        document.getElementById('send-button').disabled = false
     });
 
     // stop fetch message event for previously selected group
@@ -255,7 +268,7 @@ document.getElementById('add-member-button').addEventListener('click', async () 
 async function addUserToGroup(memberId){
     let groupId = document.getElementById('chat-header-title').getAttribute('groupId')
     try{
-        const response = await fetch(`${config.BACKEND_URL}/groupMember`, {
+        const response = await fetch(`https://${BACKEND_BASE_URL}/groupMember`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -281,7 +294,7 @@ document.getElementById('group-info').addEventListener('click', async () => {
     let groupId = document.getElementById('chat-header-title').getAttribute('groupId')
     groupId = `id=${encodeURIComponent(groupId)}`
     // let memberData = []
-     fetch(`${config.BACKEND_URL}/groupMember?${groupId}`,{
+     fetch(`https://${BACKEND_BASE_URL}/groupMember?${groupId}`,{
         method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -365,15 +378,12 @@ document.getElementById('group-info').addEventListener('click', async () => {
     });
 })
 
-async function fetchMessages(selectedChat, lastMessageId) {
+async function fetchMessages(selectedChat) {
     if (selectedChat) {
-        let fetchMessageLimit = 10
         let queryParams = ''
         queryParams += `id=${encodeURIComponent(selectedChat.id)}`
-        queryParams += lastMessageId ? `&skip=${encodeURIComponent(lastMessageId)}` : ''
-        queryParams += `&limit=${encodeURIComponent(fetchMessageLimit)}`
 
-        const response = await fetch(`${config.BACKEND_URL}/message?${queryParams}`, {
+        const response = await fetch(`https://${BACKEND_BASE_URL}/message?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -384,12 +394,12 @@ async function fetchMessages(selectedChat, lastMessageId) {
         const messages = await response.json()
 
         if(messages && messages.length > 0) {
-            let messageData = localStorage.getItem(selectedChat.name)
+            let messageData = localStorage.getItem(`group ${selectedChat.id}`)
             messageData = messageData ? JSON.parse(messageData) : { messages : [], lastMessageId: undefined}
             messageData.messages = messageData.messages.concat(messages)
             messageData.lastMessageId = messages[messages.length-1].id
 
-            localStorage.setItem(selectedChat.name, JSON.stringify(messageData))
+            localStorage.setItem(`group ${selectedChat.id}`, JSON.stringify(messageData))
 
             messages.forEach(message => {
                 let type = currentUser.id == message.senderId ? 'sent' : 'recieved'
@@ -412,7 +422,7 @@ async function removeMember(e) {
         let current = e.target.id.length > 0 ? e.target : e.target.parentElement
         let params = `id=${encodeURIComponent(current.id)}`
         try{
-            const response = await fetch(`${config.BACKEND_URL}/groupMember?${params}`,{
+            const response = await fetch(`https://${BACKEND_BASE_URL}/groupMember?${params}`,{
                 method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -435,7 +445,7 @@ async function makeAdmin(e){
     let current = e.target.id.length > 0 ? e.target : e.target.parentElement
     let params = `id=${encodeURIComponent(current.id)}`
     try{
-        const response = await fetch(`${config.BACKEND_URL}/groupMember?${params}`,{
+        const response = await fetch(`https://${BACKEND_BASE_URL}/groupMember?${params}`,{
             method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
