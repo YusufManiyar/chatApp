@@ -8,7 +8,7 @@ if(!token) {
     window.location.href = '../login/login.html'
 }
 
-const socket = new WebSocket(`ws://${config.BACKEND_BASE_URL}`)
+const socket = new WebSocket(`ws://${config.BACKEND_BASE_URL}/token=${token}`)
 
 socket.addEventListener('open', () => {
     console.log('WebSocket connection established');
