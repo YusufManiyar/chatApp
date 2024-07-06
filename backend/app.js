@@ -52,7 +52,6 @@ wss.on('connection', (ws, req) => {
                 return;
             }
 
-            console.log('ws user =>', user)
             // Attach user details to WebSocket connection
             ws.user = user
 

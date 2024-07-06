@@ -43,7 +43,7 @@ module.exports = {
                 groupId: member.groupId,
                 role: 'admin'
             }})
-            console.log(totalAdmins)
+
             if(totalAdmins <= 1 && member.role === 'admin'){
                 throw 'admin cant leave this group'
             }

@@ -17,7 +17,7 @@ module.exports = {
 
     getMessage: async(req, res) => {
         try {
-            console.log('reqqq',req.query)
+
             const user = req.user
             const query = req.query
             const groupId = query.id

@@ -6,7 +6,7 @@ document.getElementById('confirm-password-icon').onclick = () => togglePasswordV
 function togglePasswordVisibility(inputId, toggleIconId) {
     const passwordInput = document.getElementById(inputId);
     const toggleIcon = document.getElementById(toggleIconId)
-    console.log(toggleIcon)
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         toggleIcon.textContent = '🙈';

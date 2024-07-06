@@ -77,7 +77,7 @@ module.exports = {
             const query = req.query
             const groupId = query.id
             const user = req.user
-            console.log(groupId, 'groupIdddddd')
+
             if(groupId === undefined){
                 const users = await User.findAll({
                     where: {id: { [Op.ne]: user.id}},
@@ -90,7 +90,7 @@ module.exports = {
                 })
                 const memberIds = []
                 members.map(el => memberIds.push(el.memberId))
-                console.log(memberIds, groupId, '=> idssssssss')
+
                 const users = await User.findAll({
                     where: {id: { [Op.notIn]: [...memberIds]}}
                 })

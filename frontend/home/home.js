@@ -14,7 +14,7 @@ socket.addEventListener('open', () => {
     console.log('WebSocket connection established');
 });
 
-socket.addEventListener('newMessage', (event) => {
+socket.on('message', (event) => {
     console.log('Message from server:', event.data);
 
     const data = JSON.parse(event.data)

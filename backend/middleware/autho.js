@@ -36,14 +36,12 @@ module.exports = {
 
             cb(null, authorizedUser)
         } catch (err) {
-            console.log('verify token error===========>>>>>>', err)
             cb(err)
         }
     },
 
     generateToken:  (req, res, next) => {
         const user = req.body
-        console.log(user, '=> user')
         const token =  jwt.sign(user.id, 'VHHZXBluiahY3A8EC7AGOC8WDO8gRC87')
         user.id = ''
         
