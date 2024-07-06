@@ -9,7 +9,6 @@ const groupMemberRoutes = require('./routes/groupMember.js');
 const { verifyTokenSocket } = require('./middleware/autho.js')
 const { addMessage } = require('./provider/message.js')
 const WebSocket = require('ws');
-const message = require('./controller/message.js');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -58,7 +57,7 @@ wss.on('connection', (ws, req) => {
             ws.user = user
 
             // Handle incoming messages
-            ws.on('message', () => addMessage(wss, ws, message))
+            ws.on('message', async (message) => await addMessage(wss, ws, message))
         });
 });
 
