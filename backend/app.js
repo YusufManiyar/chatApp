@@ -17,7 +17,7 @@ const port = process.env.PORT || 4000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: process.env.CHATMET_FRONTEND_URL
+    origin: process.env.CHATMET_FRONTEND_URL || 'http://127.0.0.1:5500/'
 }));
 
 // Routes setup
