@@ -1,7 +1,6 @@
 const WebSocket = require('ws');
 const Message = require('../model/message.js')
 const { uploadFile } = require('./fileSystem.js')
-const { Readable } = require('stream');
 
 module.exports = {
     addMessage: async (wss, ws, body) => {
@@ -9,9 +8,10 @@ module.exports = {
         const user = ws.user;
         const senderId = user.id;
         try {
+            let fileUrl
             if(attachment) {
                 //write code to upload file to cloud and get the url
-                const fileUrl = await uploadFile(attachment)
+                fileUrl = await uploadFile(attachment)
             }
 
             const newMessage = await Message.create({ senderId, receiverId, message, attachment: fileUrl });

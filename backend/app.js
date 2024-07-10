@@ -8,16 +8,6 @@ const cors = require('cors');
 const groupMemberRoutes = require('./routes/groupMember.js');
 const { verifyTokenSocket } = require('./middleware/autho.js')
 const { addMessage } = require('./provider/message.js')
-const { uploadFile } = require('./provider/fileSystem.js')
-
-const fs = require('fs')
-
-fs.openAsBlob('../frontend/assets/icons8-add-25.png').then(async file => {
-    const fileUrl = await uploadFile(file)
-    console.log(fileUrl, '=> fileURL')    
-}
-
-)
 
 const WebSocket = require('ws');
 
