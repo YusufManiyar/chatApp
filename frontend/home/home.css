@@ -136,7 +136,7 @@ li.clicked {
     align-items: flex-end;
 } */
 
-.chat-input {
+/* .chat-input {
     display: flex;
     border-top: 1px solid #ccc;
 }
@@ -154,6 +154,89 @@ li.clicked {
     color: white;
     border: none;
     cursor: pointer;
+} */
+
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Chat Input Section */
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin-right: 10px;
+    outline: none;
+}
+
+.chat-input button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.chat-input button#file-button {
+    background-color: #f1f1f1;
+    color: #555;
+    border-radius: 50%;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.chat-input button#send-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.file-display {
+    display: flex;
+    align-items: center;
+    background-color: #e9f5ff;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-left: 10px;
+}
+
+.file-name {
+    margin-right: 10px;
+    color: #007bff;
+}
+
+.remove-file-button {
+    background-color: transparent;
+    border: none;
+    color: #ff4d4d;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.remove-file-button:hover {
+    color: #ff0000;
 }
 
 

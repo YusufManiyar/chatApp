@@ -8,6 +8,17 @@ const cors = require('cors');
 const groupMemberRoutes = require('./routes/groupMember.js');
 const { verifyTokenSocket } = require('./middleware/autho.js')
 const { addMessage } = require('./provider/message.js')
+const { uploadFile } = require('./provider/fileSystem.js')
+
+const fs = require('fs')
+
+fs.openAsBlob('../frontend/assets/icons8-add-25.png').then(async file => {
+    const fileUrl = await uploadFile(file)
+    console.log(fileUrl, '=> fileURL')    
+}
+
+)
+
 const WebSocket = require('ws');
 
 const app = express();
@@ -17,7 +28,7 @@ const port = process.env.PORT || 4000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: process.env.CHATMET_FRONTEND_URL
+    origin: process.env.CHATMET_FRONTEND_URL || 'http://127.0.0.1:5500/'
 }));
 
 // Routes setup

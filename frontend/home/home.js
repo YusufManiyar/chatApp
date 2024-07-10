@@ -24,7 +24,7 @@ socket.addEventListener('message', (event) => {
     localStorage.setItem(`group ${data.recieverId}`, JSON.stringify(messageData))
 
     let type = currentUser.id == data.senderId ? 'sent' : 'recieved'
-    appendMessage(data.message, type)
+    appendMessage(data, type)
 });
 
 // logout button
@@ -51,7 +51,6 @@ function filterGroups() {
     });
 }
 document.getElementById('search-input').addEventListener('input', filterGroups);
-
 
 // Create Group modal
 const createGroupButton = document.getElementById('create-group-button');
@@ -90,7 +89,7 @@ document.getElementById('create-group-submit').onclick = async () => {
                     },
                     body: JSON.stringify({ name,memberIds })
                 });
-    
+
                 const data = await response.json()
                 showGroup(data, 'admin')
         } else {
@@ -161,6 +160,7 @@ function showGroup(group, role) {
     groupElement.addEventListener('click', async () => await selectGroup(group, role));
     groupList.appendChild(groupElement);
 }
+
 document.addEventListener('DOMContentLoaded', async () => {
     // Fetch All groups of the user
     try {
@@ -181,6 +181,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to get users', error);
     }
 
+
+
+
 });
 
 const intervalManager = {
@@ -199,14 +202,50 @@ async function selectGroup(group, role) {
     // Send Message in a group
     document.getElementById('groupInfo').style.display = 'none'
     document.getElementById('group-detail').style.display = 'flex'
+    const fileButton = document.getElementById('file-button');
+    const fileInput = document.getElementById('file-input');
+    const fileDisplay = document.getElementById('file-display');
+    const fileNameDisplay = document.getElementById('file-name');
+    const removeFileButton = document.getElementById('remove-file-button');
+
+    fileButton.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    let file
+    // Handle file selection
+    fileInput.addEventListener('change', (e) => {
+        file = e.target.files[0];
+        if (file) {
+            fileNameDisplay.textContent = file.name;
+            fileDisplay.style.display = 'block';
+        }
+    });
+
+    // Handle remove file button click
+    removeFileButton.addEventListener('click', () => {
+        file = null;
+        fileInput.value = '';
+        fileDisplay.style.display = 'none';
+    });
+
+
     document.getElementById('send-button').addEventListener('click', async () => {
         document.getElementById('send-button').disabled = true
         const messageInput = document.getElementById('message-input');
         const message = messageInput.value;
-        if (message.trim() && group) {
+        console.log(file)
+        if (message.trim() && group || file) {
             // Send message to backend API
             try {
-                socket.send(JSON.stringify({ receiverId: group.id, message }))
+                const msg = { receiverId: group.id, message}
+                if(file) {
+                    msg.attachment = file
+                    file = null;
+                    fileInput.value = '';
+                    fileDisplay.style.display = 'none';
+                }
+                socket.send(JSON.stringify(msg))
             } catch (error) {
                 console.error('Failed to send message', error);
             }
@@ -230,7 +269,7 @@ async function selectGroup(group, role) {
 
     messageData.messages.forEach(message => {
         let type = currentUser.id == message.senderId ? 'sent' : 'recieved'
-        appendMessage(message.message, type)
+        appendMessage(message, type)
     })
 
 
@@ -402,17 +441,17 @@ async function fetchMessages(selectedChat) {
 
             messages.forEach(message => {
                 let type = currentUser.id == message.senderId ? 'sent' : 'recieved'
-                appendMessage(message.message, type)
+                appendMessage(message, type)
             })
         }
     }
 }
 
-function appendMessage(message, type) {
+function appendMessage(data, type) {
     const messageContainer = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', type);
-    messageElement.innerText = message;
+    messageElement.innerHTML = data.attachment ? `File uploaded: <a href="${data.attachment}" target="_blank">${file.name}</a></br><span>${data.message}</span>` : `<span>${data.message}</span>`
     messageContainer.appendChild(messageElement);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
@@ -460,3 +499,4 @@ async function makeAdmin(e){
         console.log(error)
     }
 }
+

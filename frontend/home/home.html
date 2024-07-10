@@ -43,8 +43,15 @@
             </div>
             <div class="chat-input">
                 <input type="text" id="message-input" placeholder="Type a message...">
+                <input type="file" id="file-input" style="display: none;">
+                <button id="file-button">📎</button>
+                <div id="file-display" class="file-display" style="display: none;">
+                    <span id="file-name" class="file-name"></span>
+                    <button id="remove-file-button" class="remove-file-button">❌</button>
+                </div>
                 <button id="send-button">Send</button>
             </div>
+            
         </div>
         <div class="group-info" id="groupInfo">
             <div>

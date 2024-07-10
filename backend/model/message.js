@@ -4,6 +4,9 @@ const User = require('./user');
 const Group = require('./group');
 
 const Message = sequelize.define('Message', {
+    attachement: {
+        type: DataTypes.STRING
+    },
     message: {
         type: DataTypes.STRING,
         allowNull: false
