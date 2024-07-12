@@ -18,8 +18,9 @@ const bucketName = 'chatmet';
 module.exports = {
     uploadFile:  async (file) => {
 
+      console.log(file, Object.getOwnPropertyNames(file), ' => file')
       const readStream = new Readable()
-      readStream.push(Buffer.from(await file.arrayBuffer()))
+      readStream.push(file)
       readStream.push(null)
 
       const filename = `chat-attachements/${new Date().toString()}, ${file.name}`

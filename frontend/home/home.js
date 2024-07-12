@@ -8,10 +8,15 @@ if(!token) {
     window.location.href = '../login/login.html'
 }
 
-const socket = new WebSocket(`ws://${config.BACKEND_BASE_URL}/token=${token}`)
+let socket = new WebSocket(`ws://${config.BACKEND_BASE_URL}/token=${token}`)
 
 socket.addEventListener('open', () => {
     console.log('WebSocket connection established');
+});
+
+socket.addEventListener('close', () => {
+    console.log('WebSocket connection close');
+    socket = new WebSocket(`ws://${config.BACKEND_BASE_URL}/token=${token}`)
 });
 
 socket.addEventListener('message', (event) => {
@@ -81,7 +86,7 @@ document.getElementById('create-group-submit').onclick = async () => {
         })
 
         if(name !== ""){
-            const response = await fetch(`https://${config.BACKEND_BASE_URL}/group`,{
+            const response = await fetch(`http://${config.BACKEND_BASE_URL}/group`,{
                 method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -133,7 +138,7 @@ dropdownToggle.addEventListener('click',async () => {
 
 async function getUsers(groupId){
 
-    const response =  await fetch(`https://${config.BACKEND_BASE_URL}/user/users?${groupId}`, {
+    const response =  await fetch(`http://${config.BACKEND_BASE_URL}/user/users?${groupId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -164,7 +169,7 @@ function showGroup(group, role) {
 document.addEventListener('DOMContentLoaded', async () => {
     // Fetch All groups of the user
     try {
-       const response =  await fetch(`https://${config.BACKEND_BASE_URL}/group`, {
+       const response =  await fetch(`http://${config.BACKEND_BASE_URL}/group`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -235,17 +240,17 @@ async function selectGroup(group, role) {
         const messageInput = document.getElementById('message-input');
         const message = messageInput.value;
         console.log(file)
-        if (message.trim() && group || file) {
+        if ((message.trim() || file) && group) {
             // Send message to backend API
             try {
                 const msg = { receiverId: group.id, message}
+                sendMessage(message, group.id, file)
                 if(file) {
-                    msg.attachment = file
                     file = null;
                     fileInput.value = '';
                     fileDisplay.style.display = 'none';
+
                 }
-                socket.send(JSON.stringify(msg))
             } catch (error) {
                 console.error('Failed to send message', error);
             }
@@ -306,7 +311,7 @@ document.getElementById('add-member-button').addEventListener('click', async () 
 async function addUserToGroup(memberId){
     let groupId = document.getElementById('chat-header-title').getAttribute('groupId')
     try{
-        const response = await fetch(`https://${config.BACKEND_BASE_URL}/groupMember`, {
+        const response = await fetch(`http://${config.BACKEND_BASE_URL}/groupMember`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -332,7 +337,7 @@ document.getElementById('group-info').addEventListener('click', async () => {
     let groupId = document.getElementById('chat-header-title').getAttribute('groupId')
     groupId = `id=${encodeURIComponent(groupId)}`
     // let memberData = []
-     fetch(`https://${config.BACKEND_BASE_URL}/groupMember?${groupId}`,{
+     fetch(`http://${config.BACKEND_BASE_URL}/groupMember?${groupId}`,{
         method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -421,7 +426,7 @@ async function fetchMessages(selectedChat) {
         let queryParams = ''
         queryParams += `id=${encodeURIComponent(selectedChat.id)}`
 
-        const response = await fetch(`https://${config.BACKEND_BASE_URL}/message?${queryParams}`, {
+        const response = await fetch(`http://${config.BACKEND_BASE_URL}/message?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -447,11 +452,39 @@ async function fetchMessages(selectedChat) {
     }
 }
 
+function sendMessage(message, receiverId, file) {
+    // Prepare JSON part
+    const data = {
+      message: message,
+      receiverId: receiverId,
+      hasFile: !!file
+    };
+  
+    // Convert JSON to Blob
+    const jsonBlob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const arrayBuffer = event.target.result;
+
+          // Combine JSON Blob and File ArrayBuffer
+          const combinedBlob = new Blob([jsonBlob, arrayBuffer], { type: 'application/octet-stream' });
+          socket.send(combinedBlob);
+        }
+        reader.readAsArrayBuffer(file);
+    }
+    else {
+        socket.send(jsonBlob)
+    }
+  
+  }  
+
 function appendMessage(data, type) {
     const messageContainer = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', type);
-    messageElement.innerHTML = data.attachment ? `File uploaded: <a href="${data.attachment}" target="_blank">${file.name}</a></br><span>${data.message}</span>` : `<span>${data.message}</span>`
+    messageElement.innerHTML = data.attachment ? `File uploaded: <a href="${data.attachment}" target="_blank">${data.name}</a></br><span>${data.message}</span>` : `<span>${data.message}</span>`
     messageContainer.appendChild(messageElement);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
@@ -460,7 +493,7 @@ async function removeMember(e) {
         let current = e.target.id.length > 0 ? e.target : e.target.parentElement
         let params = `id=${encodeURIComponent(current.id)}`
         try{
-            const response = await fetch(`https://${config.BACKEND_BASE_URL}/groupMember?${params}`,{
+            const response = await fetch(`http://${config.BACKEND_BASE_URL}/groupMember?${params}`,{
                 method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -483,7 +516,7 @@ async function makeAdmin(e){
     let current = e.target.id.length > 0 ? e.target : e.target.parentElement
     let params = `id=${encodeURIComponent(current.id)}`
     try{
-        const response = await fetch(`https://${config.BACKEND_BASE_URL}/groupMember?${params}`,{
+        const response = await fetch(`http://${config.BACKEND_BASE_URL}/groupMember?${params}`,{
             method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -499,4 +532,5 @@ async function makeAdmin(e){
         console.log(error)
     }
 }
+
 
