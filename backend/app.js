@@ -8,6 +8,7 @@ const cors = require('cors');
 const groupMemberRoutes = require('./routes/groupMember.js');
 const { verifyTokenSocket } = require('./middleware/autho.js')
 const { addMessage } = require('./provider/message.js')
+const archiveChat = require('./provider/archivedChat.js')
 
 const WebSocket = require('ws');
 
@@ -28,9 +29,10 @@ app.use('/group', groupRoutes);
 app.use('/groupMember', groupMemberRoutes);
 
 
-    // Create an HTTP server for Express
+// Create an HTTP server for Express
 const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
+    archiveChat.start()
 });
 
 // Create a WebSocket server
@@ -63,8 +65,9 @@ wss.on('connection', (ws, req) => {
 
 
 
-sequelize.sync({ focus: true }).then(() => {
+sequelize.sync().then(() => {
     console.log('Database synced');
+    console.log(sequelize.models)
 });
 
 module.exports = app;
