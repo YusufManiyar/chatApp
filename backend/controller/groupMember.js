@@ -1,8 +1,6 @@
 
 const GroupMember = require('../model/groupMembers.js');
 const User = require('../model/user.js');
-const { Op, where } = require('sequelize');
-const message = require('./message.js');
 
 module.exports = {
     

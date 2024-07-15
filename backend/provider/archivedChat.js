@@ -1,6 +1,7 @@
-const { Sequelize, Op } = require('sequelize');
+const { Op } = require('sequelize');
+const sequelize = require('../config/database.js')
 const Message = require('../model/message.js');
-const ArchivedChat = require('../model/archivedChat.js');
+const ArchivedChat = require('../model/archiveChat.js');
 const { CronJob } = require('cron');
 
 async function archiveOldMessages() {
@@ -8,7 +9,7 @@ async function archiveOldMessages() {
   oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
   // Start a transaction
-  const transaction = await Sequelize.transaction();
+  const transaction = await sequelize.transaction()
 
   try {
     // Find messages older than one day
@@ -29,7 +30,7 @@ async function archiveOldMessages() {
     );
 
     // Delete old messages from Chat
-    await Chat.destroy({
+    await Message.destroy({
       where: {
         createdAt: {
           [Op.lt]: oneDayAgo
@@ -48,6 +49,6 @@ async function archiveOldMessages() {
   }
 }
 
-const job = new CronJob('5 0 0 * * *', archiveOldMessages, null, true, 'Asia/Kolkata');
+const job = new CronJob('*/1 * * * *', archiveOldMessages, null, true, 'Asia/Kolkata');
 
-job.start();
+module.exports = job
