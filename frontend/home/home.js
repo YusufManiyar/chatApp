@@ -298,7 +298,7 @@ document.getElementById('add-member-button').addEventListener('click', async () 
         users.forEach(member => {
             const listItem = document.createElement('li');
             listItem.className = 'member'
-            listItem.innerHTML = `<div id='${member.id}' class='add-user'> ${member.username} <img src='../assets/icons8-add-25.png' class='addUser' onClick= addUserToGroup(${member.id}) atl='add user'></div>`; // Assuming user object has a 'name' property
+            listItem.innerHTML = `<div id='${member.id}' class='add-user'> ${member.username} <img src='../assets/icons8-add-25.png' class='addUser' onclick= addUserToGroup(${member.id}) atl='add user'></div>`; // Assuming user object has a 'name' property
             groupMembersList.appendChild(listItem);
             // var a = document.getElementsByClassName('addUser')
             // console.log(a)
