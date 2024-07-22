@@ -23,17 +23,17 @@ socket.addEventListener('message', (event) => {
     console.log('Message from server:', event.data);
 
     const data = JSON.parse(event.data)
-    let messageData = localStorage.getItem(`group ${data.recieverId}`)
+    let messageData = localStorage.getItem(`group ${data.receiverId}`)
     messageData = messageData ? JSON.parse(messageData) : { messages : [], lastMessageId: undefined}
     messageData.messages = messageData.messages.concat([data])
     localStorage.setItem(`group ${data.recieverId}`, JSON.stringify(messageData))
-
+    
     let type = currentUser.id == data.senderId ? 'sent' : 'recieved'
-
+    
     const chatHeader = document.getElementById('chat-header-title')
     const groupId = chatHeader.getAttribute('groupId')
 
-    if(groupId === data.recieverId) {
+    if(groupId === data.receiverId.toString()) {
         appendMessage(data, type)
     }
 });
