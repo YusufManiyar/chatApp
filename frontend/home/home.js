@@ -29,7 +29,13 @@ socket.addEventListener('message', (event) => {
     localStorage.setItem(`group ${data.recieverId}`, JSON.stringify(messageData))
 
     let type = currentUser.id == data.senderId ? 'sent' : 'recieved'
-    appendMessage(data, type)
+
+    const chatHeader = document.getElementById('chat-header-title')
+    const groupId = chatHeader.getAttribute('groupId')
+
+    if(groupId === data.recieverId) {
+        appendMessage(data, type)
+    }
 });
 
 // logout button
@@ -164,6 +170,7 @@ function showGroup(group, role) {
     // groupElement.id = group.id
     groupElement.addEventListener('click', async () => await selectGroup(group, role));
     groupList.appendChild(groupElement);
+    console.log(groupList)
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -278,8 +285,6 @@ async function selectGroup(group, role) {
 
 
     fetchMessages(group, messageData.lastMessageId)
-    // intervalManager.start(() => fetchMessages(group, messageData.lastMessageId), 3000);
-    
 }
 
 document.getElementById('add-member-button').addEventListener('click', async () => {
