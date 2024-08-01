@@ -495,7 +495,7 @@ function appendMessage(data, type) {
     const messageContainer = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', type);
-    messageElement.innerHTML = data.attachment ? `File uploaded: <a href="${data.attachment}" target="_blank">${data.name}</a></br><span>${data.message}</span>` : `<span>${data.message}</span>`
+    messageElement.innerHTML = data.attachment ? `File uploaded: <a href="${data.attachment}" target="_blank">${data.attachment}</a></br><span>${data.message}</span>` : `<span>${data.message}</span>`
     messageContainer.appendChild(messageElement);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
